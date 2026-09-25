@@ -1,0 +1,115 @@
+<mxfile host="app.diagrams.net">
+<diagram name="Complete E-Commerce System Swimlane Flow">
+<mxGraphModel dx="2600" dy="2200" grid="1" gridSize="10">
+<root>
+<mxCell id="0"/>
+<mxCell id="1" parent="0"/>
+
+<!-- Lanes -->
+<mxCell id="customer_lane" value="Customer Mobile App" style="swimlane;horizontal=0;html=1" vertex="1" parent="1">
+<mxGeometry x="20" y="40" width="240" height="1600" as="geometry"/>
+</mxCell>
+
+<mxCell id="admin_lane" value="Admin Portal / Staff" style="swimlane;horizontal=0;html=1" vertex="1" parent="1">
+<mxGeometry x="260" y="40" width="260" height="1600" as="geometry"/>
+</mxCell>
+
+<mxCell id="backend_lane" value="Backend System" style="swimlane;horizontal=0;html=1" vertex="1" parent="1">
+<mxGeometry x="520" y="40" width="300" height="1600" as="geometry"/>
+</mxCell>
+
+<mxCell id="inventory_lane" value="Inventory Module" style="swimlane;horizontal=0;html=1" vertex="1" parent="1">
+<mxGeometry x="820" y="40" width="260" height="1600" as="geometry"/>
+</mxCell>
+
+<mxCell id="payment_lane" value="Payment Module" style="swimlane;horizontal=0;html=1" vertex="1" parent="1">
+<mxGeometry x="1080" y="40" width="260" height="1600" as="geometry"/>
+</mxCell>
+
+<mxCell id="delivery_lane" value="Delivery Service" style="swimlane;horizontal=0;html=1" vertex="1" parent="1">
+<mxGeometry x="1340" y="40" width="280" height="1600" as="geometry"/>
+</mxCell>
+
+<!-- Customer -->
+<mxCell id="c1" value="Register / Login&#xa;Browse Products&#xa;Search Product&#xa;View Product Detail" style="rounded=1;html=1" vertex="1" parent="customer_lane">
+<mxGeometry x="30" y="80" width="170" height="110" as="geometry"/>
+</mxCell>
+
+<mxCell id="c2" value="Add To Cart&#xa;Checkout&#xa;Select Address&#xa;Confirm Order" style="rounded=1;html=1" vertex="1" parent="customer_lane">
+<mxGeometry x="30" y="300" width="170" height="110" as="geometry"/>
+</mxCell>
+
+<mxCell id="c3" value="View Order Status&#xa;View Delivery Company&#xa;View Estimated Arrival Date" style="rounded=1;html=1" vertex="1" parent="customer_lane">
+<mxGeometry x="30" y="1100" width="170" height="120" as="geometry"/>
+</mxCell>
+
+<!-- Admin -->
+<mxCell id="a1" value="Dashboard&#xa;Receive New Order&#xa;Review Order&#xa;Confirm Order" style="rounded=1;html=1" vertex="1" parent="admin_lane">
+<mxGeometry x="40" y="450" width="180" height="120" as="geometry"/>
+</mxCell>
+
+<mxCell id="a2" value="Product Management&#xa;Create Product&#xa;Manage Category&#xa;Upload Images&#xa;Manage Price / SKU" style="rounded=1;html=1" vertex="1" parent="admin_lane">
+<mxGeometry x="40" y="80" width="180" height="140" as="geometry"/>
+</mxCell>
+
+<mxCell id="a3" value="Customer Management&#xa;View Customer&#xa;Order History&#xa;Account Status" style="rounded=1;html=1" vertex="1" parent="admin_lane">
+<mxGeometry x="40" y="700" width="180" height="120" as="geometry"/>
+</mxCell>
+
+<mxCell id="a4" value="Reports & Settings&#xa;Sales Report&#xa;Inventory Report&#xa;System Configuration" style="rounded=1;html=1" vertex="1" parent="admin_lane">
+<mxGeometry x="40" y="950" width="180" height="120" as="geometry"/>
+</mxCell>
+
+<!-- Backend -->
+<mxCell id="b1" value="Authentication Service&#xa;User Session&#xa;Access Control" style="rounded=1;html=1" vertex="1" parent="backend_lane">
+<mxGeometry x="50" y="80" width="190" height="100" as="geometry"/>
+</mxCell>
+
+<mxCell id="b2" value="Product Service&#xa;Category API&#xa;Product API&#xa;Search API" style="rounded=1;html=1" vertex="1" parent="backend_lane">
+<mxGeometry x="50" y="250" width="190" height="100" as="geometry"/>
+</mxCell>
+
+<mxCell id="b3" value="Order Service&#xa;Create Order&#xa;Order Status&#xa;Order History" style="rounded=1;html=1" vertex="1" parent="backend_lane">
+<mxGeometry x="50" y="500" width="190" height="120" as="geometry"/>
+</mxCell>
+
+<!-- Inventory -->
+<mxCell id="i1" value="Inventory Setup&#xa;Warehouse Stock&#xa;Shop Stock&#xa;SKU Management" style="rounded=1;html=1" vertex="1" parent="inventory_lane">
+<mxGeometry x="40" y="300" width="180" height="120" as="geometry"/>
+</mxCell>
+
+<mxCell id="i2" value="Stock Movement&#xa;Purchase Stock&#xa;Transfer Stock&#xa;Adjust Stock&#xa;Stock History" style="rounded=1;html=1" vertex="1" parent="inventory_lane">
+<mxGeometry x="40" y="520" width="180" height="130" as="geometry"/>
+</mxCell>
+
+<mxCell id="i3" value="Low Stock Alert&#xa;Inventory Reports" style="rounded=1;html=1" vertex="1" parent="inventory_lane">
+<mxGeometry x="40" y="800" width="180" height="100" as="geometry"/>
+</mxCell>
+
+<!-- Payment -->
+<mxCell id="p1" value="Payment Method&#xa;Online Payment&#xa;Cash On Delivery&#xa;Payment Status&#xa;Transaction History" style="rounded=1;html=1" vertex="1" parent="payment_lane">
+<mxGeometry x="40" y="500" width="180" height="140" as="geometry"/>
+</mxCell>
+
+<!-- Delivery -->
+<mxCell id="d1" value="Admin Contacts Delivery Company&#xa;Delivery Service Provides ETA Date" style="rounded=1;html=1" vertex="1" parent="delivery_lane">
+<mxGeometry x="40" y="800" width="200" height="120" as="geometry"/>
+</mxCell>
+
+<mxCell id="d2" value="Delivery Completed&#xa;Admin Confirms Arrival&#xa;Close Order" style="rounded=1;html=1" vertex="1" parent="delivery_lane">
+<mxGeometry x="40" y="1100" width="200" height="120" as="geometry"/>
+</mxCell>
+
+<!-- Edges -->
+<mxCell id="e1" edge="1" parent="1" source="c2" target="b3"><mxGeometry relative="1" as="geometry"/></mxCell>
+<mxCell id="e2" edge="1" parent="1" source="b3" target="i1"><mxGeometry relative="1" as="geometry"/></mxCell>
+<mxCell id="e3" edge="1" parent="1" source="b3" target="p1"><mxGeometry relative="1" as="geometry"/></mxCell>
+<mxCell id="e4" edge="1" parent="1" source="b3" target="a1"><mxGeometry relative="1" as="geometry"/></mxCell>
+<mxCell id="e5" edge="1" parent="1" source="a1" target="d1"><mxGeometry relative="1" as="geometry"/></mxCell>
+<mxCell id="e6" edge="1" parent="1" source="d1" target="a1"><mxGeometry relative="1" as="geometry"/></mxCell>
+<mxCell id="e7" edge="1" parent="1" source="d2" target="c3"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+</root>
+</mxGraphModel>
+</diagram>
+</mxfile>

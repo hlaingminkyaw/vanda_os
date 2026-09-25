@@ -1,0 +1,97 @@
+flowchart TD
+
+    subgraph Product_Setup[Product and Inventory Setup]
+        A[Admin Creates Product] --> B[Product Information]
+        B --> C[SKU Product Code]
+        B --> D[Price and Images]
+        B --> E[Create Inventory Record]
+        E --> F[Warehouse Stock]
+        E --> G[Physical Shop Stock]
+    end
+
+    subgraph Customer_Flow[Customer Shopping Flow]
+        H[Customer Opens App] --> I{Logged In}
+        I -- No --> J[Register Login]
+        I -- Yes --> K[Home Page]
+        J --> K
+        K --> L[Browse Products]
+        L --> M[View Product]
+        M --> N[Add To Cart]
+        N --> O[Checkout]
+        O --> P[Select Address]
+        P --> Q[Review Order]
+    end
+
+    subgraph Order_Flow[Order Processing]
+        Q --> R[Check Stock]
+        R --> S{Available}
+        S -- No --> T[Out Of Stock]
+        S -- Yes --> U[Place Order]
+        U --> V[Create Order]
+        V --> W[Reserve Stock]
+        W --> X[Admin Receives Order]
+        X --> Y{Accept Order}
+        Y -- No --> Z[Cancel Order]
+        Y -- Yes --> AA[Pick Product]
+        AA --> AB[Pack Product]
+        AB --> AC[Deduct Stock]
+    end
+
+    subgraph Delivery[Manual Delivery Flow]
+        AC --> AD[Arrange Delivery]
+        AD --> AE[Select Delivery Company]
+        AE --> AF[Enter Delivery Information]
+        AF --> AF1[Company Name]
+        AF --> AF2[Tracking Number]
+        AF --> AF3[Estimated Arrival Time]
+        AF --> AG[Customer Views Delivery Status]
+        AG --> AH{Delivered}
+        AH -- No --> AI[Update Status ETA]
+        AI --> AG
+        AH -- Yes --> AJ[Order Completed]
+    end
+
+    subgraph Inventory_Module[Inventory Management]
+        AK[Supplier Purchase] --> AL[Receive Stock]
+        AL --> AM[Warehouse Inventory]
+        AM --> AN{Stock Movement}
+        AN --> AO[Transfer To Shop]
+        AN --> AP[Online Order]
+        AN --> AQ[Offline Sale]
+        AN --> AR[Manual Adjustment]
+        AO --> AS[Update Stock Balance]
+        AP --> AS
+        AQ --> AS
+        AR --> AS
+        AS --> AT[Stock Movement History]
+        AT --> AU[Inventory Reports]
+    end
+
+    subgraph System[System Architecture]
+        APP[Customer Mobile App]
+        ADMIN[Admin Portal]
+        BACKEND[Backend]
+        DB[(Database)]
+        PAYMENT[Payment Service]
+        NOTIFY[Notification Service]
+
+        APP --> BACKEND
+        ADMIN --> BACKEND
+        BACKEND <--> DB
+        BACKEND --> PAYMENT
+        BACKEND --> NOTIFY
+        NOTIFY --> APP
+    end
+
+    subgraph Future_Marketplace[Future Shopee Style Expansion]
+        MARKET[Marketplace]
+        V1[Vendor 1]
+        V2[Vendor 2]
+        VN[Vendor N]
+        CATALOG[Product Catalog]
+
+        MARKET --> CATALOG
+        CATALOG --> V1
+        CATALOG --> V2
+        CATALOG --> VN
+    end
