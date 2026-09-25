@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import CategoryBar from '../components/CategoryBar';
 import BannerCarousel from '../components/BannerCarousel';
 import PerksBar from '../components/PerksBar';
-import FlashDeals from '../components/FlashDeals';
 import ProductCard from '../components/ProductCard';
 
 export default function HomeView({
@@ -47,7 +46,6 @@ export default function HomeView({
         <>
           <BannerCarousel />
           <PerksBar />
-          <FlashDeals products={products} onSelectProduct={onSelectProduct} />
         </>
       )}
 

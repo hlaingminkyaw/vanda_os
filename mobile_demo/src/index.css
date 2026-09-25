@@ -508,101 +508,6 @@ body {
   color: var(--primary);
 }
 
-/* Flash Deals Section */
-.section-flash-deals {
-  background: #ffffff;
-  padding: 14px;
-  margin-bottom: 10px;
-  border-bottom: 1px solid var(--border-light);
-}
-
-.flash-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-}
-
-.flash-title-group {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.flash-badge {
-  background: var(--primary);
-  color: #fff;
-  padding: 3px 8px;
-  border-radius: var(--radius-xs);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.4px;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.flash-timer {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 11.5px;
-  font-weight: 700;
-  color: var(--text-main);
-}
-
-.timer-box {
-  background: var(--text-main);
-  color: #fff;
-  padding: 2px 5px;
-  border-radius: 4px;
-  font-size: 11px;
-}
-
-/* Flash Horizontal Scroll */
-.flash-products-scroll {
-  display: flex;
-  gap: 12px;
-  overflow-x: auto;
-  padding-bottom: 4px;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-.flash-products-scroll::-webkit-scrollbar {
-  display: none;
-}
-
-.flash-product-mini-card {
-  flex-shrink: 0;
-  width: 132px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-default);
-  background: #ffffff;
-  padding: 8px;
-  cursor: pointer;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
-}
-
-.flash-product-mini-card:active {
-  transform: scale(0.97);
-}
-
-.flash-card-img-wrap {
-  width: 100%;
-  height: 110px;
-  border-radius: var(--radius-sm);
-  overflow: hidden;
-  background: var(--bg-subtle);
-  position: relative;
-  margin-bottom: 8px;
-}
-
-.flash-card-img-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
 .discount-tag-corner {
   position: absolute;
   top: 6px;
@@ -614,20 +519,6 @@ body {
   padding: 2px 6px;
   border-radius: 4px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-}
-
-.flash-price {
-  font-size: 14px;
-  font-weight: 800;
-  color: var(--primary-deep);
-  line-height: 1;
-  margin-bottom: 4px;
-}
-
-.flash-sold-label {
-  font-size: 10.5px;
-  font-weight: 600;
-  color: var(--text-secondary);
 }
 
 /* Main Products 2-Column Grid */
