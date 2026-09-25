@@ -27,6 +27,12 @@ This repository uses [Backlog.md](https://github.com/MrLesk/Backlog.md) for loca
 ### Useful Commands
 
 ```bash
+# Start the Mobile App (mobile_demo)
+npm run mobile:dev
+
+# Build the Mobile App
+npm run mobile:build
+
 # Open interactive terminal Kanban board
 npm run board
 # or: npx backlog board
@@ -41,6 +47,27 @@ npx backlog overview
 # Create a new task
 npx backlog task create "Task title"
 ```
+
+---
+
+## 📱 Mobile App Demo (`mobile_demo`)
+
+A modern, mobile-only React e-commerce application located in [`mobile_demo/`](mobile_demo/) modeling the end-to-end shopping and order lifecycle from [`docs/ecommerce-visual-flow.png`](docs/ecommerce-visual-flow.png).
+
+### Key Features & Design Philosophy
+- **Designer-Crafted UI**: Warm, balanced neutral palette with controlled terracotta accents, avoiding oversaturated colors, with smooth transitions and subtle elevation.
+- **Mobile Phone Frame Simulator**: On desktop, renders inside an elegant phone mockup with status bar, dynamic island, and a full-screen toggle; automatically responsive on mobile viewports.
+- **Zero API Dependency**: Powered entirely by rich, structured JSON dummy data in [`dummyData.js`](mobile_demo/src/data/dummyData.js) (products, categories, stock, delivery carriers, and sample orders).
+- **Multi-Location Inventory Tracking**: Displays real-time breakdown of **Warehouse Stock** vs. **Physical Shop Stock** on product pages as specified in the architecture.
+- **Complete Visual Flow Implementation**:
+  1. *Browse & Select*: Hero banner carousel, categories, flash deals with live countdown & progress bars, search, and dual-column grid.
+  2. *Checkout*: Saved delivery address selection, courier options (Standard Free vs Priority Courier).
+  3. *Payment*: Cash on Delivery (COD), Credit/Debit Card, or QR Digital Wallet.
+  4. *Order Confirmed & Stock Deduction*: Automatically reserves stock and generates order ID.
+  5. *Estimated Arrival Date*: Calculated delivery window provided by shop/courier.
+  6. *In Delivery*: Tracking number, courier assignment, and active status pill.
+  7. *Completed*: Permanent status ledger with past order history.
+
 
 ---
 

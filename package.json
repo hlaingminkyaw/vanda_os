@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "backlog": "backlog",
     "board": "backlog board",
-    "browser": "backlog browser"
+    "browser": "backlog browser",
+    "mobile:dev": "npm --prefix mobile_demo run dev",
+    "mobile:build": "npm --prefix mobile_demo run build"
   },
   "keywords": [],
   "author": "",
