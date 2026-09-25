@@ -22,3 +22,9 @@ Do not edit Backlog task, draft, document, decision, or milestone markdown files
 
 </CRITICAL_INSTRUCTION>
 <!-- BACKLOG.MD GUIDELINES END -->
+
+## Project Rules & Guidelines
+
+- **Documents Location**: Always put all documentation, specifications, architecture assets, diagrams, and reference guides inside the `docs/` folder. Never leave loose documentation files in the repository root.
+- **README Updates**: Whenever updating or modifying the codebase, review and update `README.md` when necessary to reflect new features, architectural changes, scripts, or operational guidelines.
+
