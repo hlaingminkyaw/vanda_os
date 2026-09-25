@@ -48,3 +48,5 @@ npx backlog task create "Task title"
 
 1. **Documentation Location**: Always place all design, architecture, specification, and reference documents in the [`docs/`](docs/) directory.
 2. **README Maintenance**: Whenever code or project features are updated, update `README.md` as necessary to reflect the latest changes and instructions.
+3. **Feature Task Creation**: When adding new features, always create a Backlog.md task first (e.g., `npx backlog task create "Feature title"`) before implementation to specify scope and acceptance criteria.
+
