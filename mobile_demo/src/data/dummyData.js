@@ -16,7 +16,7 @@ export const BANNERS = [
     subtitle: 'Up to 40% off minimalist audio & desktop accessories',
     badge: 'Free Delivery',
     bgGradient: 'from-stone-900 to-stone-800',
-    accentColor: '#e0533c',
+    accentColor: '#f59e0b',
     image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&auto=format&fit=crop&q=80'
   },
   {

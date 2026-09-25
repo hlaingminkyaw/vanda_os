@@ -56,12 +56,6 @@ export default function FlashDeals({ products, onSelectProduct }) {
               <span className="discount-tag-corner">{prod.discount}</span>
             </div>
             <div className="flash-price">${prod.price.toFixed(2)}</div>
-            <div className="flash-progress-bar">
-              <div
-                className="flash-progress-fill"
-                style={{ width: `${prod.flashProgress}%` }}
-              />
-            </div>
             <div className="flash-sold-label">{prod.soldCount}</div>
           </div>
         ))}

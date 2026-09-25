@@ -14,11 +14,19 @@
   --text-tertiary: #94a3b8;
   --text-inverse: #ffffff;
 
-  /* Primary Accent: Sophisticated Warm Terracotta / Coral */
-  --primary: #e0533c;
-  --primary-hover: #c9442e;
-  --primary-light: #fff5f3;
-  --primary-border: #fed7d2;
+  /* Primary Accent: Sophisticated Warm Yellowish / Amber Gold */
+  --primary: #f59e0b;
+  --primary-hover: #d97706;
+  --primary-deep: #b45309;
+  --primary-light: #fefce8;
+  --primary-border: #fde68a;
+  --text-on-primary: #0f172a;
+
+  /* Secondary Accent: Sleek Midnight Slate / Navy Charcoal */
+  --secondary: #0f172a;
+  --secondary-hover: #1e293b;
+  --secondary-light: #f8fafc;
+  --secondary-border: #e2e8f0;
   
   /* Accent States */
   --success: #059669;
@@ -259,13 +267,13 @@ body {
   height: 28px;
   border-radius: 8px;
   background: var(--primary);
-  color: #fff;
+  color: var(--text-on-primary);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 800;
   font-size: 15px;
-  box-shadow: 0 2px 6px rgba(224, 83, 60, 0.35);
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
 }
 
 .header-brand-title {
@@ -306,9 +314,9 @@ body {
   top: -2px;
   right: -2px;
   background: var(--primary);
-  color: #fff;
+  color: var(--text-on-primary);
   font-size: 10px;
-  font-weight: 700;
+  font-weight: 800;
   min-width: 17px;
   height: 17px;
   border-radius: 999px;
@@ -334,7 +342,7 @@ body {
 .search-input-wrapper:focus-within {
   background: #ffffff;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(224, 83, 60, 0.12);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
 }
 
 .search-input-wrapper input {
@@ -600,38 +608,24 @@ body {
   top: 6px;
   left: 6px;
   background: var(--primary);
-  color: #fff;
+  color: var(--text-on-primary);
   font-size: 9.5px;
   font-weight: 800;
-  padding: 2px 5px;
+  padding: 2px 6px;
   border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
 }
 
 .flash-price {
   font-size: 14px;
   font-weight: 800;
-  color: var(--primary);
+  color: var(--primary-deep);
   line-height: 1;
-  margin-bottom: 6px;
-}
-
-.flash-progress-bar {
-  width: 100%;
-  height: 6px;
-  background: #fed7d2;
-  border-radius: 999px;
-  overflow: hidden;
   margin-bottom: 4px;
 }
 
-.flash-progress-fill {
-  height: 100%;
-  background: var(--primary);
-  border-radius: 999px;
-}
-
 .flash-sold-label {
-  font-size: 10px;
+  font-size: 10.5px;
   font-weight: 600;
   color: var(--text-secondary);
 }
@@ -792,13 +786,13 @@ body {
 .price-currency {
   font-size: 11px;
   font-weight: 700;
-  color: var(--primary);
+  color: var(--primary-deep);
 }
 
 .price-current {
   font-size: 16px;
   font-weight: 800;
-  color: var(--primary);
+  color: var(--primary-deep);
   letter-spacing: -0.3px;
 }
 
@@ -1133,18 +1127,18 @@ body {
 .btn-primary-action {
   flex: 1;
   background: var(--primary);
-  color: #fff;
+  color: var(--text-on-primary);
   border: none;
   padding: 13px;
   border-radius: var(--radius-full);
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 800;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  box-shadow: 0 4px 14px rgba(224, 83, 60, 0.3);
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
   transition: all var(--transition-fast);
 }
 
@@ -1154,9 +1148,9 @@ body {
 
 .btn-secondary-action {
   flex: 1;
-  background: var(--primary-light);
-  color: var(--primary);
-  border: 1px solid var(--primary-border);
+  background: var(--secondary);
+  color: #ffffff;
+  border: 1px solid var(--secondary);
   padding: 13px;
   border-radius: var(--radius-full);
   font-size: 14px;

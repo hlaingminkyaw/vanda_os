@@ -241,7 +241,7 @@ export default function App() {
       {/* Desktop Helper Toolbar */}
       <div className="simulator-top-toolbar">
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <Smartphone size={14} color="#e0533c" />
+          <Smartphone size={14} color="#f59e0b" />
           <span style={{ fontWeight: 700, color: '#f1f5f9' }}>Lumina Mobile UI</span>
           <span>• Shopee-Inspired Flow Demo</span>
         </div>
