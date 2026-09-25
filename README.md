@@ -76,4 +76,6 @@ A modern, mobile-only React e-commerce application located in [`mobile_demo/`](m
 1. **Documentation Location**: Always place all design, architecture, specification, and reference documents in the [`docs/`](docs/) directory.
 2. **README Maintenance**: Whenever code or project features are updated, update `README.md` as necessary to reflect the latest changes and instructions.
 3. **Feature Task Creation**: When adding new features, always create a Backlog.md task first (e.g., `npx backlog task create "Feature title"`) before implementation to specify scope and acceptance criteria.
+4. **Move Completed Tasks**: Whenever a task is marked as Done/completed, always move the task file into the suitable completed folder (`backlog/completed/`) so active task directories stay organized.
+
 
