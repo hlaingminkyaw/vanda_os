@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { Package, Truck, ChevronRight } from 'lucide-react';
+import { Package, Truck, ChevronRight, Calendar, CheckCircle2, Clock } from 'lucide-react';
 
 export default function OrdersView({ orders, onSelectOrder }) {
   const [activeFilter, setActiveFilter] = useState('all');
 
   const filteredOrders = orders.filter((o) => {
     if (activeFilter === 'all') return true;
-    if (activeFilter === 'in_delivery') return o.status === 'in_delivery' || o.status === 'confirmed';
+    if (activeFilter === 'confirmed') return o.status === 'confirmed' || o.status === 'date_set';
+    if (activeFilter === 'in_delivery') return o.status === 'in_delivery';
     if (activeFilter === 'completed') return o.status === 'completed';
     return true;
   });
@@ -15,41 +16,48 @@ export default function OrdersView({ orders, onSelectOrder }) {
     <div style={{ padding: '14px', paddingBottom: '90px' }}>
       <div style={{ marginBottom: 12 }}>
         <h2 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-main)' }}>
-          My Purchases & Tracking
+          My Orders & Tracking
         </h2>
         <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: 2 }}>
-          Real-time order statuses and delivery timelines
+          Customer Mobile App Flow (Steps 4 to 7)
         </p>
       </div>
 
-      {/* Filter Tabs */}
+      {/* Filter Tabs matching visual flow states */}
       <div
         style={{
           display: 'flex',
-          gap: 6,
+          gap: 4,
           background: 'var(--bg-subtle)',
-          padding: 4,
+          padding: 3,
           borderRadius: 'var(--radius-full)',
           marginBottom: 16
         }}
       >
         <button
           className={`feed-tab-btn ${activeFilter === 'all' ? 'active' : ''}`}
-          style={{ flex: 1, padding: '7px 0', textAlign: 'center' }}
+          style={{ flex: 1, padding: '7px 0', textAlign: 'center', fontSize: '11px' }}
           onClick={() => setActiveFilter('all')}
         >
           All ({orders.length})
         </button>
         <button
+          className={`feed-tab-btn ${activeFilter === 'confirmed' ? 'active' : ''}`}
+          style={{ flex: 1, padding: '7px 0', textAlign: 'center', fontSize: '11px' }}
+          onClick={() => setActiveFilter('confirmed')}
+        >
+          Confirmed ({orders.filter((o) => o.status === 'confirmed' || o.status === 'date_set').length})
+        </button>
+        <button
           className={`feed-tab-btn ${activeFilter === 'in_delivery' ? 'active' : ''}`}
-          style={{ flex: 1, padding: '7px 0', textAlign: 'center' }}
+          style={{ flex: 1, padding: '7px 0', textAlign: 'center', fontSize: '11px' }}
           onClick={() => setActiveFilter('in_delivery')}
         >
-          In Delivery ({orders.filter((o) => o.status === 'in_delivery' || o.status === 'confirmed').length})
+          In Delivery ({orders.filter((o) => o.status === 'in_delivery').length})
         </button>
         <button
           className={`feed-tab-btn ${activeFilter === 'completed' ? 'active' : ''}`}
-          style={{ flex: 1, padding: '7px 0', textAlign: 'center' }}
+          style={{ flex: 1, padding: '7px 0', textAlign: 'center', fontSize: '11px' }}
           onClick={() => setActiveFilter('completed')}
         >
           Completed ({orders.filter((o) => o.status === 'completed').length})
@@ -60,12 +68,14 @@ export default function OrdersView({ orders, onSelectOrder }) {
       {filteredOrders.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--text-secondary)' }}>
           <Package size={36} color="var(--text-tertiary)" style={{ margin: '0 auto 10px' }} />
-          <p style={{ fontWeight: 700, fontSize: '14px', color: 'var(--text-main)' }}>No orders in this category</p>
+          <p style={{ fontWeight: 700, fontSize: '14px', color: 'var(--text-main)' }}>No orders in this tab</p>
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {filteredOrders.map((order) => {
             const isCompleted = order.status === 'completed';
+            const isConfirmed = order.status === 'confirmed';
+            const isDateSet = order.status === 'date_set';
             const firstItem = order.items?.[0];
 
             return (
@@ -73,7 +83,7 @@ export default function OrdersView({ orders, onSelectOrder }) {
                 key={order.id}
                 onClick={() => onSelectOrder(order)}
                 style={{
-                  background: '#ffffff',
+                  background: 'var(--bg-surface)',
                   border: '1px solid var(--border-default)',
                   borderRadius: 'var(--radius-md)',
                   padding: '14px',
@@ -107,9 +117,23 @@ export default function OrdersView({ orders, onSelectOrder }) {
                       fontWeight: 800,
                       padding: '2px 8px',
                       borderRadius: '999px',
-                      background: isCompleted ? 'var(--success-bg)' : 'var(--primary-light)',
-                      color: isCompleted ? 'var(--success)' : 'var(--primary)',
-                      border: `1px solid ${isCompleted ? 'var(--success-border)' : 'var(--primary-border)'}`
+                      background: isCompleted
+                        ? 'var(--success-bg)'
+                        : isConfirmed
+                        ? 'var(--info-bg)'
+                        : 'var(--primary-light)',
+                      color: isCompleted
+                        ? 'var(--success)'
+                        : isConfirmed
+                        ? 'var(--info)'
+                        : 'var(--primary)',
+                      border: `1px solid ${
+                        isCompleted
+                          ? 'var(--success-border)'
+                          : isConfirmed
+                          ? 'var(--info-border)'
+                          : 'var(--primary-border)'
+                      }`
                     }}
                   >
                     {order.statusText}
@@ -143,7 +167,7 @@ export default function OrdersView({ orders, onSelectOrder }) {
                   </div>
                 )}
 
-                {/* Delivery ETA info box (Step 5 in docs/ecommerce-visual-flow.png) */}
+                {/* Estimated Arrival Date Info Box (Step 5 in visual flow.png) */}
                 <div
                   style={{
                     background: 'var(--bg-app)',
@@ -157,25 +181,31 @@ export default function OrdersView({ orders, onSelectOrder }) {
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--text-body)' }}>
-                    <Truck size={14} color="var(--primary)" />
-                    <span>ETA: <strong>{order.estimatedArrival}</strong></span>
+                    <Calendar size={14} color="var(--primary)" />
+                    <span>
+                      Estimated Arrival: <strong>{order.estimatedArrival}</strong>
+                    </span>
                   </div>
-                  <span style={{ fontSize: '10.5px', color: 'var(--text-tertiary)' }}>{order.carrier}</span>
+                  <span style={{ fontSize: '10px', color: 'var(--text-tertiary)', fontWeight: 600 }}>
+                    Provided by Shop
+                  </span>
                 </div>
 
-                {/* Footer with Total and Track Button */}
+                {/* Footer with Payment & Total */}
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 4 }}>
-                  <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
-                    Order Total:{' '}
-                    <strong style={{ fontSize: '14px', color: 'var(--text-main)' }}>
+                  <div>
+                    <div style={{ fontSize: '10.5px', color: 'var(--text-tertiary)' }}>
+                      {order.paymentMethod}
+                    </div>
+                    <div style={{ fontSize: '13px', fontWeight: 800, color: 'var(--text-main)' }}>
                       ${order.total?.toFixed(2)}
-                    </strong>
+                    </div>
                   </div>
 
                   <button
                     style={{
                       border: '1px solid var(--border-default)',
-                      background: '#ffffff',
+                      background: 'var(--bg-surface)',
                       color: 'var(--text-main)',
                       padding: '5px 12px',
                       borderRadius: 'var(--radius-full)',
@@ -187,7 +217,7 @@ export default function OrdersView({ orders, onSelectOrder }) {
                       gap: 4
                     }}
                   >
-                    <span>Track Status</span>
+                    <span>View Timeline</span>
                     <ChevronRight size={13} />
                   </button>
                 </div>

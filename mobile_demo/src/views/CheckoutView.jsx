@@ -5,10 +5,11 @@ import {
   Truck,
   CreditCard,
   Banknote,
-  QrCode,
-  ShieldCheck
+  Tag,
+  ShieldCheck,
+  Info
 } from 'lucide-react';
-import { SAVED_ADDRESSES, DELIVERY_OPTIONS, PAYMENT_METHODS } from '../data/dummyData';
+import { SAVED_ADDRESSES, PAYMENT_METHODS, DEFAULT_DELIVERY_INFO } from '../data/dummyData';
 
 export default function CheckoutView({
   checkoutData,
@@ -16,34 +17,50 @@ export default function CheckoutView({
   onPlaceOrder
 }) {
   const [selectedAddressId, setSelectedAddressId] = useState(SAVED_ADDRESSES[0].id);
-  const [selectedDeliveryId, setSelectedDeliveryId] = useState(DELIVERY_OPTIONS[0].id);
   const [selectedPaymentId, setSelectedPaymentId] = useState(PAYMENT_METHODS[0].id);
+  const [voucherCode, setVoucherCode] = useState('');
+  const [discountAmount, setDiscountAmount] = useState(checkoutData?.discount || 0);
+  const [voucherMsg, setVoucherMsg] = useState(
+    checkoutData?.discount > 0 ? { type: 'success', text: `Voucher discount $${checkoutData.discount.toFixed(2)} applied` } : null
+  );
   const [isPlacing, setIsPlacing] = useState(false);
 
   const currentAddress = SAVED_ADDRESSES.find((a) => a.id === selectedAddressId) || SAVED_ADDRESSES[0];
-  const currentDelivery = DELIVERY_OPTIONS.find((d) => d.id === selectedDeliveryId) || DELIVERY_OPTIONS[0];
   const currentPayment = PAYMENT_METHODS.find((p) => p.id === selectedPaymentId) || PAYMENT_METHODS[0];
 
   const subtotal = checkoutData?.subtotal || 0;
-  const shippingFee = currentDelivery.price;
-  const discount = checkoutData?.discount || 0;
-  const grandTotal = Math.max(0, subtotal + shippingFee - discount);
+  const shippingFee = DEFAULT_DELIVERY_INFO.price;
+  const grandTotal = Math.max(0, subtotal + shippingFee - discountAmount);
+
+  const handleApplyVoucher = (e) => {
+    e.preventDefault();
+    const code = voucherCode.trim().toUpperCase();
+    if (code === 'VANDA10' || code === 'LUMINA10' || code === 'SAVE10') {
+      setDiscountAmount(10.00);
+      setVoucherMsg({ type: 'success', text: '$10.00 discount voucher applied!' });
+    } else if (code === 'FREESHIP') {
+      setDiscountAmount(5.00);
+      setVoucherMsg({ type: 'success', text: '$5.00 discount voucher applied!' });
+    } else {
+      setVoucherMsg({ type: 'error', text: 'Invalid code. Try "VANDA10"' });
+    }
+  };
 
   const handleConfirmOrder = () => {
     setIsPlacing(true);
     setTimeout(() => {
       onPlaceOrder({
         address: currentAddress,
-        delivery: currentDelivery,
+        delivery: DEFAULT_DELIVERY_INFO,
         payment: currentPayment,
         items: checkoutData.items,
         subtotal,
         shippingFee,
-        discount,
+        discount: discountAmount,
         total: grandTotal
       });
       setIsPlacing(false);
-    }, 600);
+    }, 500);
   };
 
   return (
@@ -51,7 +68,7 @@ export default function CheckoutView({
       style={{
         position: 'absolute',
         inset: 0,
-        background: '#f8fafc',
+        background: 'var(--bg-app)',
         zIndex: 65,
         display: 'flex',
         flexDirection: 'column',
@@ -63,18 +80,24 @@ export default function CheckoutView({
         <button className="icon-btn-ghost" onClick={onBackToCart} aria-label="Back">
           <ArrowLeft size={18} />
         </button>
-        <span style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-main)' }}>
-          Checkout Order
-        </span>
+        <div style={{ textAlign: 'center' }}>
+          <span style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-main)', display: 'block' }}>
+            Checkout & Payment
+          </span>
+          <span style={{ fontSize: '10.5px', color: 'var(--text-secondary)', fontWeight: 600 }}>
+            Steps 2 & 3 of Customer Flow
+          </span>
+        </div>
         <div style={{ width: 38 }} />
       </div>
 
       {/* Scrollable Content */}
       <div style={{ flex: 1, overflowY: 'auto', padding: '14px', paddingBottom: '90px' }}>
+        
         {/* Step 2 in Visual Flow: Delivery Address */}
         <div
           style={{
-            background: '#ffffff',
+            background: 'var(--bg-surface)',
             borderRadius: 'var(--radius-md)',
             border: '1px solid var(--border-default)',
             padding: '14px',
@@ -84,7 +107,7 @@ export default function CheckoutView({
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '13px', fontWeight: 700 }}>
               <MapPin size={16} color="var(--primary)" />
-              <span>Delivery Address</span>
+              <span>Select Delivery Address</span>
             </div>
             <span
               style={{
@@ -96,7 +119,7 @@ export default function CheckoutView({
                 borderRadius: '4px'
               }}
             >
-              Step 2 of Visual Flow
+              Step 2: Checkout
             </span>
           </div>
 
@@ -120,6 +143,7 @@ export default function CheckoutView({
                 >
                   <input
                     type="radio"
+                    name="addressSelection"
                     checked={isSelected}
                     onChange={() => setSelectedAddressId(addr.id)}
                     style={{ marginTop: 2, accentColor: 'var(--primary)' }}
@@ -160,68 +184,32 @@ export default function CheckoutView({
           </div>
         </div>
 
-        {/* Shipping Method Option */}
+        {/* Delivery Flow Note Card (Per docs/visual flow.png: Delivery service & arrival date arranged by shop) */}
         <div
           style={{
-            background: '#ffffff',
+            background: 'var(--bg-app)',
             borderRadius: 'var(--radius-md)',
             border: '1px solid var(--border-default)',
-            padding: '14px',
-            marginBottom: 12
+            padding: '12px 14px',
+            marginBottom: 12,
+            display: 'flex',
+            alignItems: 'flex-start',
+            gap: 10
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '13px', fontWeight: 700, marginBottom: 10 }}>
-            <Truck size={16} color="var(--primary)" />
-            <span>Shipping & Courier Service</span>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {DELIVERY_OPTIONS.map((opt) => {
-              const isSelected = selectedDeliveryId === opt.id;
-              return (
-                <div
-                  key={opt.id}
-                  onClick={() => setSelectedDeliveryId(opt.id)}
-                  style={{
-                    border: isSelected ? '1.5px solid var(--primary)' : '1px solid var(--border-light)',
-                    background: isSelected ? 'var(--primary-light)' : '#ffffff',
-                    borderRadius: 'var(--radius-sm)',
-                    padding: '10px 12px',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between'
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <input
-                      type="radio"
-                      checked={isSelected}
-                      onChange={() => setSelectedDeliveryId(opt.id)}
-                      style={{ accentColor: 'var(--primary)' }}
-                    />
-                    <div>
-                      <div style={{ fontSize: '12.5px', fontWeight: 700, color: 'var(--text-main)' }}>
-                        {opt.name}
-                      </div>
-                      <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>
-                        Carrier: <strong>{opt.carrier}</strong> ({opt.estimatedDays})
-                      </div>
-                    </div>
-                  </div>
-                  <div style={{ fontSize: '13px', fontWeight: 800, color: opt.price === 0 ? 'var(--success)' : 'var(--text-main)' }}>
-                    {opt.price === 0 ? 'FREE' : `$${opt.price.toFixed(2)}`}
-                  </div>
-                </div>
-              );
-            })}
+          <Truck size={18} color="var(--primary)" style={{ flexShrink: 0, marginTop: 2 }} />
+          <div style={{ fontSize: '11.5px', lineHeight: 1.4, color: 'var(--text-body)' }}>
+            <div style={{ fontWeight: 700, color: 'var(--text-main)', marginBottom: 2 }}>
+              Delivery Arranged by Shop (Doorstep Delivery)
+            </div>
+            Delivery is arranged manually with a delivery service once items are prepared. You will be able to view the estimated arrival date once scheduled.
           </div>
         </div>
 
-        {/* Step 3 in Visual Flow: Make Payment */}
+        {/* Step 2: Discount Voucher (if available) */}
         <div
           style={{
-            background: '#ffffff',
+            background: 'var(--bg-surface)',
             borderRadius: 'var(--radius-md)',
             border: '1px solid var(--border-default)',
             padding: '14px',
@@ -230,8 +218,8 @@ export default function CheckoutView({
         >
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '13px', fontWeight: 700 }}>
-              <Banknote size={16} color="var(--primary)" />
-              <span>Select Payment Method</span>
+              <Tag size={16} color="var(--primary)" />
+              <span>Apply Discount (If Available)</span>
             </div>
             <span
               style={{
@@ -243,14 +231,86 @@ export default function CheckoutView({
                 borderRadius: '4px'
               }}
             >
-              Step 3 of Visual Flow
+              Step 2: Discount
+            </span>
+          </div>
+
+          <form onSubmit={handleApplyVoucher} style={{ display: 'flex', gap: 8 }}>
+            <div
+              className="search-input-wrapper"
+              style={{ flex: 1, padding: '6px 12px', background: 'var(--bg-subtle)' }}
+            >
+              <input
+                type="text"
+                placeholder="Discount code (e.g. VANDA10)"
+                value={voucherCode}
+                onChange={(e) => setVoucherCode(e.target.value)}
+              />
+            </div>
+            <button
+              type="submit"
+              style={{
+                background: 'var(--text-main)',
+                color: '#fff',
+                border: 'none',
+                padding: '0 16px',
+                borderRadius: 'var(--radius-full)',
+                fontSize: '12px',
+                fontWeight: 700,
+                cursor: 'pointer'
+              }}
+            >
+              Apply
+            </button>
+          </form>
+
+          {voucherMsg && (
+            <div
+              style={{
+                fontSize: '11px',
+                fontWeight: 600,
+                marginTop: 6,
+                color: voucherMsg.type === 'success' ? 'var(--success)' : 'var(--primary)'
+              }}
+            >
+              {voucherMsg.text}
+            </div>
+          )}
+        </div>
+
+        {/* Step 3 in Visual Flow: Make Payment */}
+        <div
+          style={{
+            background: 'var(--bg-surface)',
+            borderRadius: 'var(--radius-md)',
+            border: '1px solid var(--border-default)',
+            padding: '14px',
+            marginBottom: 12
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '13px', fontWeight: 700 }}>
+              <Banknote size={16} color="var(--primary)" />
+              <span>Choose Payment Method</span>
+            </div>
+            <span
+              style={{
+                fontSize: '10px',
+                fontWeight: 700,
+                color: 'var(--primary)',
+                background: 'var(--primary-light)',
+                padding: '2px 6px',
+                borderRadius: '4px'
+              }}
+            >
+              Step 3: Make Payment
             </span>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {PAYMENT_METHODS.map((pm) => {
               const isSelected = selectedPaymentId === pm.id;
-              const IconComp = pm.id === 'cod' ? Banknote : pm.id === 'online_card' ? CreditCard : QrCode;
+              const IconComp = pm.type === 'cod' ? Banknote : CreditCard;
 
               return (
                 <div
@@ -260,7 +320,7 @@ export default function CheckoutView({
                     border: isSelected ? '1.5px solid var(--primary)' : '1px solid var(--border-light)',
                     background: isSelected ? 'var(--primary-light)' : '#ffffff',
                     borderRadius: 'var(--radius-sm)',
-                    padding: '10px 12px',
+                    padding: '12px',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
@@ -269,14 +329,15 @@ export default function CheckoutView({
                 >
                   <input
                     type="radio"
+                    name="paymentMethodSelection"
                     checked={isSelected}
                     onChange={() => setSelectedPaymentId(pm.id)}
                     style={{ accentColor: 'var(--primary)' }}
                   />
                   <div
                     style={{
-                      width: 32,
-                      height: 32,
+                      width: 34,
+                      height: 34,
                       borderRadius: '50%',
                       background: isSelected ? 'var(--primary)' : 'var(--bg-subtle)',
                       color: isSelected ? '#ffffff' : 'var(--text-body)',
@@ -286,11 +347,11 @@ export default function CheckoutView({
                       flexShrink: 0
                     }}
                   >
-                    <IconComp size={16} />
+                    <IconComp size={18} />
                   </div>
                   <div style={{ flex: 1 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <span style={{ fontSize: '12.5px', fontWeight: 700, color: 'var(--text-main)' }}>
+                      <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-main)' }}>
                         {pm.name}
                       </span>
                       {pm.recommended && (
@@ -304,11 +365,11 @@ export default function CheckoutView({
                             fontWeight: 800
                           }}
                         >
-                          RECOMMENDED
+                          COD OPTION
                         </span>
                       )}
                     </div>
-                    <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: 1 }}>
+                    <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: 2 }}>
                       {pm.desc}
                     </div>
                   </div>
@@ -321,7 +382,7 @@ export default function CheckoutView({
         {/* Ordered Items Preview */}
         <div
           style={{
-            background: '#ffffff',
+            background: 'var(--bg-surface)',
             borderRadius: 'var(--radius-md)',
             border: '1px solid var(--border-default)',
             padding: '14px',
@@ -366,7 +427,7 @@ export default function CheckoutView({
         {/* Payment Summary */}
         <div
           style={{
-            background: '#ffffff',
+            background: 'var(--bg-surface)',
             borderRadius: 'var(--radius-md)',
             border: '1px solid var(--border-default)',
             padding: '14px',
@@ -381,15 +442,13 @@ export default function CheckoutView({
             <span style={{ fontWeight: 600 }}>${subtotal.toFixed(2)}</span>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-secondary)' }}>
-            <span>Shipping Option ({currentDelivery.name})</span>
-            <span style={{ fontWeight: 600, color: shippingFee === 0 ? 'var(--success)' : 'var(--text-main)' }}>
-              {shippingFee === 0 ? 'FREE' : `$${shippingFee.toFixed(2)}`}
-            </span>
+            <span>Delivery Fee</span>
+            <span style={{ fontWeight: 600, color: 'var(--success)' }}>FREE</span>
           </div>
-          {discount > 0 && (
+          {discountAmount > 0 && (
             <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--primary)' }}>
-              <span>Voucher Savings</span>
-              <span style={{ fontWeight: 700 }}>-${discount.toFixed(2)}</span>
+              <span>Discount Voucher</span>
+              <span style={{ fontWeight: 700 }}>-${discountAmount.toFixed(2)}</span>
             </div>
           )}
           <div
@@ -410,14 +469,14 @@ export default function CheckoutView({
         </div>
       </div>
 
-      {/* Fixed Bottom Order Button */}
+      {/* Fixed Bottom Action Bar */}
       <div
         style={{
           position: 'absolute',
           bottom: 0,
           left: 0,
           right: 0,
-          background: 'rgba(255, 255, 255, 0.98)',
+          background: 'var(--bg-bottom-nav)',
           backdropFilter: 'blur(16px)',
           borderTop: '1px solid var(--border-default)',
           padding: '12px 16px',
@@ -436,7 +495,7 @@ export default function CheckoutView({
 
         <button
           className="btn-primary-action"
-          style={{ flex: 'none', padding: '12px 28px' }}
+          style={{ flex: 'none', padding: '12px 24px' }}
           onClick={handleConfirmOrder}
           disabled={isPlacing}
         >
@@ -445,7 +504,9 @@ export default function CheckoutView({
           ) : (
             <>
               <ShieldCheck size={16} />
-              <span>Place Order</span>
+              <span>
+                {currentPayment.type === 'cod' ? 'Confirm (Cash on Delivery)' : 'Pay Online & Confirm'}
+              </span>
             </>
           )}
         </button>

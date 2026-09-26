@@ -4,20 +4,27 @@ import {
   Truck,
   CheckCircle2,
   MapPin,
-  Calendar
+  Calendar,
+  Sparkles,
+  Info,
+  Clock,
+  Package
 } from 'lucide-react';
 
-export default function OrderTrackingModal({ order, onClose }) {
+export default function OrderTrackingModal({ order, onClose, onAdvanceStep }) {
   if (!order) return null;
 
   const isCompleted = order.status === 'completed';
+  const isConfirmed = order.status === 'confirmed';
+  const isDateSet = order.status === 'date_set';
+  const isInDelivery = order.status === 'in_delivery';
 
   return (
     <div
       style={{
         position: 'absolute',
         inset: 0,
-        background: '#f8fafc',
+        background: 'var(--bg-app)',
         zIndex: 80,
         display: 'flex',
         flexDirection: 'column',
@@ -32,7 +39,7 @@ export default function OrderTrackingModal({ order, onClose }) {
         </button>
         <div style={{ textAlign: 'center' }}>
           <span style={{ fontSize: '14px', fontWeight: 800, color: 'var(--text-main)', display: 'block' }}>
-            Order Status & Tracking
+            Order Status & Timeline
           </span>
           <span style={{ fontSize: '10.5px', color: 'var(--text-tertiary)', fontWeight: 600 }}>
             {order.id}
@@ -43,6 +50,7 @@ export default function OrderTrackingModal({ order, onClose }) {
 
       {/* Scrollable Timeline */}
       <div style={{ flex: 1, overflowY: 'auto', padding: '14px', paddingBottom: '30px' }}>
+        
         {/* Status Highlight Banner */}
         <div
           style={{
@@ -57,10 +65,10 @@ export default function OrderTrackingModal({ order, onClose }) {
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
             <div
               style={{
-                width: 36,
-                height: 36,
+                width: 38,
+                height: 38,
                 borderRadius: '50%',
-                background: isCompleted ? 'var(--success)' : 'var(--primary)',
+                background: isCompleted ? 'var(--success)' : isConfirmed ? 'var(--info)' : 'var(--primary)',
                 color: '#fff',
                 display: 'flex',
                 alignItems: 'center',
@@ -68,90 +76,114 @@ export default function OrderTrackingModal({ order, onClose }) {
                 flexShrink: 0
               }}
             >
-              {isCompleted ? <CheckCircle2 size={20} /> : <Truck size={20} />}
+              {isCompleted ? <CheckCircle2 size={20} /> : isConfirmed ? <Clock size={20} /> : <Truck size={20} />}
             </div>
-            <div>
+            <div style={{ flex: 1 }}>
               <div style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-main)' }}>
                 {order.statusText}
               </div>
               <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>
-                {order.deliveryServiceNotice || 'Shop has scheduled dispatch with courier.'}
+                {order.deliveryServiceNotice || 'Shop has received order and is managing dispatch.'}
               </div>
             </div>
           </div>
 
-          {/* Estimated Arrival Date Box (Step 5 in docs/ecommerce-visual-flow.png) */}
+          {/* Estimated Arrival Date Box (Step 5 of Customer Mobile App Flow) */}
           <div
             style={{
               background: 'var(--bg-app)',
               borderRadius: 'var(--radius-sm)',
-              padding: '10px 12px',
+              padding: '12px 14px',
               border: '1px solid var(--border-light)',
               marginTop: 10,
               display: 'flex',
               alignItems: 'center',
-              gap: 8
+              gap: 10
             }}
           >
-            <Calendar size={16} color="var(--primary)" />
+            <Calendar size={18} color="var(--primary)" />
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>
-                Estimated Arrival Date (Provided by Shop)
+                Estimated Arrival Date (Step 5 - Provided by Shop)
               </div>
-              <div style={{ fontSize: '13px', fontWeight: 800, color: 'var(--text-main)', marginTop: 1 }}>
-                {order.estimatedArrival}
+              <div style={{ fontSize: '13.5px', fontWeight: 800, color: 'var(--text-main)', marginTop: 2 }}>
+                {order.estimatedArrival || 'Pending Shop Arrangement with Courier'}
               </div>
             </div>
           </div>
         </div>
 
-        {/* Courier & Tracking Details */}
+        {/* Delivery Flow Note (Direct quote & design from docs/visual flow.png) */}
         <div
           style={{
-            background: '#ffffff',
+            background: 'var(--bg-surface)',
             borderRadius: 'var(--radius-md)',
             border: '1px solid var(--border-default)',
             padding: '14px',
             marginBottom: 14
           }}
         >
-          <div style={{ fontSize: '13px', fontWeight: 700, marginBottom: 10, color: 'var(--text-main)' }}>
-            Delivery Carrier Info
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '12.5px', fontWeight: 700, marginBottom: 8, color: 'var(--text-main)' }}>
+            <Info size={16} color="var(--primary)" />
+            <span>Delivery Flow (Scope Rules)</span>
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: 6 }}>
-            <span style={{ color: 'var(--text-secondary)' }}>Courier:</span>
-            <span style={{ fontWeight: 700, color: 'var(--text-main)' }}>{order.carrier}</span>
+          <div style={{ fontSize: '11.5px', color: 'var(--text-body)', lineHeight: 1.45, background: 'var(--bg-subtle)', padding: '10px 12px', borderRadius: 'var(--radius-sm)' }}>
+            <strong>Important Note from visual flow:</strong><br />
+            • Admin arranges with delivery service manually.<br />
+            • Delivery service provides estimated arrival date.<br />
+            • Admin enters estimated date into system.<br />
+            • <em>Customer can only see the estimated arrival date.</em><br />
+            • When the item arrives, admin inquires the delivery service and closes the order.
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: 6 }}>
-            <span style={{ color: 'var(--text-secondary)' }}>Tracking Code:</span>
-            <span
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginTop: 10 }}>
+            <span style={{ color: 'var(--text-secondary)' }}>Delivery Service:</span>
+            <span style={{ fontWeight: 700, color: 'var(--text-main)' }}>{order.deliveryService || 'Arranged by Shop'}</span>
+          </div>
+
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginTop: 6 }}>
+            <span style={{ color: 'var(--text-secondary)' }}>Payment:</span>
+            <span style={{ fontWeight: 700, color: 'var(--text-main)' }}>
+              {order.paymentMethod} • <span style={{ color: isCompleted || order.paymentType === 'online' ? 'var(--success)' : 'var(--warning)' }}>{order.paymentStatus}</span>
+            </span>
+          </div>
+
+          {/* Interactive Fast Forward for Demo Testing */}
+          {onAdvanceStep && !isCompleted && (
+            <button
+              onClick={() => onAdvanceStep(order.id)}
               style={{
-                fontFamily: 'monospace',
-                fontWeight: 700,
-                color: 'var(--primary)',
+                marginTop: 12,
+                width: '100%',
                 background: 'var(--primary-light)',
-                padding: '1px 6px',
-                borderRadius: '4px'
+                border: '1px dashed var(--primary)',
+                color: 'var(--primary-deep)',
+                padding: '8px 12px',
+                borderRadius: 'var(--radius-sm)',
+                fontSize: '11.5px',
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 6
               }}
             >
-              {order.trackingNumber}
-            </span>
-          </div>
-
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px' }}>
-            <span style={{ color: 'var(--text-secondary)' }}>Payment:</span>
-            <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>
-              {order.paymentMethod} • <span style={{ color: isCompleted ? 'var(--success)' : 'var(--warning)' }}>{order.paymentStatus}</span>
-            </span>
-          </div>
+              <Sparkles size={14} />
+              <span>
+                {isConfirmed && 'Simulate Step 5: Admin Enters Estimated Arrival Date'}
+                {isDateSet && 'Simulate Step 6: Package Handed to Courier (In Delivery)'}
+                {isInDelivery && 'Simulate Step 7: Courier Delivers & Admin Closes Order'}
+              </span>
+            </button>
+          )}
         </div>
 
-        {/* 5-Step Visual Flow Stepper (From docs/ecommerce-visual-flow.png) */}
+        {/* 7-Step Visual Flow Stepper (docs/visual flow.png) */}
         <div
           style={{
-            background: '#ffffff',
+            background: 'var(--bg-surface)',
             borderRadius: 'var(--radius-md)',
             border: '1px solid var(--border-default)',
             padding: '16px',
@@ -160,19 +192,19 @@ export default function OrderTrackingModal({ order, onClose }) {
         >
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
             <h4 style={{ fontSize: '13.5px', fontWeight: 800, color: 'var(--text-main)' }}>
-              Order Progress Timeline
+              7-Step Customer Mobile App Flow
             </h4>
             <span
               style={{
                 fontSize: '9.5px',
                 fontWeight: 700,
-                color: 'var(--text-secondary)',
-                background: 'var(--bg-subtle)',
+                color: 'var(--primary)',
+                background: 'var(--primary-light)',
                 padding: '2px 6px',
                 borderRadius: 4
               }}
             >
-              Flow Model
+              Flow Scope
             </span>
           </div>
 
@@ -180,7 +212,13 @@ export default function OrderTrackingModal({ order, onClose }) {
             {order.timeline?.map((step, idx) => {
               let stepClass = '';
               if (step.done) stepClass = 'done';
-              else if (idx === 3 && order.status === 'in_delivery') stepClass = 'active';
+              else if (
+                (idx === 3 && isConfirmed) ||
+                (idx === 4 && isDateSet) ||
+                (idx === 5 && isInDelivery)
+              ) {
+                stepClass = 'active';
+              }
 
               return (
                 <div key={idx} className={`timeline-step-item ${stepClass}`}>
@@ -199,7 +237,7 @@ export default function OrderTrackingModal({ order, onClose }) {
         {/* Destination Address */}
         <div
           style={{
-            background: '#ffffff',
+            background: 'var(--bg-surface)',
             borderRadius: 'var(--radius-md)',
             border: '1px solid var(--border-default)',
             padding: '14px',
@@ -211,7 +249,7 @@ export default function OrderTrackingModal({ order, onClose }) {
           <MapPin size={18} color="var(--primary)" style={{ flexShrink: 0, marginTop: 2 }} />
           <div>
             <div style={{ fontSize: '12.5px', fontWeight: 700, color: 'var(--text-main)' }}>
-              Shipping Destination
+              Delivery Destination (Step 2)
             </div>
             <div style={{ fontSize: '11.5px', color: 'var(--text-secondary)', marginTop: 2, lineHeight: 1.4 }}>
               {order.address}
@@ -222,7 +260,7 @@ export default function OrderTrackingModal({ order, onClose }) {
         {/* Order Items */}
         <div
           style={{
-            background: '#ffffff',
+            background: 'var(--bg-surface)',
             borderRadius: 'var(--radius-md)',
             border: '1px solid var(--border-default)',
             padding: '14px'

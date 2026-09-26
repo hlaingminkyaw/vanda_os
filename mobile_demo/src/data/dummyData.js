@@ -16,7 +16,7 @@ export const BANNERS = [
     subtitle: 'Up to 40% off minimalist audio & desktop accessories',
     badge: 'Free Delivery',
     bgGradient: 'from-stone-900 to-stone-800',
-    accentColor: '#f59e0b',
+    accentColor: '#e39d3d',
     image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&auto=format&fit=crop&q=80'
   },
   {
@@ -26,7 +26,7 @@ export const BANNERS = [
     subtitle: 'Crafted solid wood & ergonomic home studio pieces',
     badge: 'Verified Mall',
     bgGradient: 'from-amber-950 to-amber-900',
-    accentColor: '#d97706',
+    accentColor: '#cb8527',
     image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&auto=format&fit=crop&q=80'
   },
   {
@@ -312,73 +312,54 @@ export const SAVED_ADDRESSES = [
   }
 ];
 
-export const DELIVERY_OPTIONS = [
-  {
-    id: 'std',
-    name: 'Standard Doorstep Delivery',
-    carrier: 'NinjaVan Express',
-    estimatedDays: '2 - 3 business days',
-    price: 0,
-    tag: 'FREE'
-  },
-  {
-    id: 'exp',
-    name: 'Priority Courier Dispatch',
-    carrier: 'DHL eCommerce',
-    estimatedDays: 'Next Day Delivery',
-    price: 4.50,
-    tag: 'FASTEST'
-  }
-];
+export const DEFAULT_DELIVERY_INFO = {
+  name: 'Standard Doorstep Delivery',
+  price: 0,
+  tag: 'FREE',
+  notice: 'Delivery service is arranged manually by shop. Estimated arrival date is provided upon confirmation.'
+};
 
 export const PAYMENT_METHODS = [
   {
     id: 'cod',
     name: 'Cash on Delivery (COD)',
-    desc: 'Pay cash directly to courier upon arrival',
+    desc: 'Pay cash directly upon arrival (Step 3: Make Payment)',
+    type: 'cod',
     icon: 'Banknote',
-    recommended: true,
-    extraFee: 0
+    recommended: true
   },
   {
-    id: 'online_card',
-    name: 'Credit / Debit Card',
-    desc: 'Instant secure checkout (Visa / Mastercard)',
+    id: 'online',
+    name: 'Online Payment',
+    desc: 'Instant secure checkout via Card / Mobile Banking',
+    type: 'online',
     icon: 'CreditCard',
-    recommended: false,
-    extraFee: 0
-  },
-  {
-    id: 'wallet',
-    name: 'Digital QR / Mobile Banking',
-    desc: 'Fast checkout via banking app or e-wallet',
-    icon: 'QrCode',
-    recommended: false,
-    extraFee: 0
+    recommended: false
   }
 ];
 
-// Initial orders modeling the 5-step customer flow in docs/ecommerce-visual-flow.png:
+// Initial orders modeling the 7-step customer mobile app flow from docs/visual flow.png:
 // Step 1: Browse & Select
-// Step 2: Checkout
-// Step 3: Make Payment
-// Step 4: Order Confirmed
-// Step 5: View Estimated Arrival Date
-// Step 6: Order In Delivery
-// Step 7: Order Completed
+// Step 2: Checkout (Select address, payment method, discount)
+// Step 3: Make Payment (Online or COD)
+// Step 4: Order Confirmed (Customer receives confirmation)
+// Step 5: View Estimated Arrival Date (Provided by the shop)
+// Step 6: Order In Delivery (Status "In Delivery" with estimated date)
+// Step 7: Order Completed (Once item arrives & confirmed with delivery service, admin closes order)
 export const INITIAL_ORDERS = [
   {
     id: 'ORD-98421',
     date: 'Today, 11:30 AM',
     status: 'in_delivery',
     statusText: 'In Delivery',
-    statusCode: 6, // Step 6 of Visual Flow
-    estimatedArrival: 'Tomorrow, Sep 26 (by 6:00 PM)',
-    carrier: 'NinjaVan Express',
-    trackingNumber: 'NV-9942-8812',
-    deliveryServiceNotice: 'Delivery service is en route to destination.',
+    stepNumber: 6,
+    stepTitle: 'Step 6: Order In Delivery',
+    estimatedArrival: 'Tomorrow by 6:00 PM',
+    deliveryService: 'NinjaVan Express',
+    deliveryServiceNotice: 'Delivery arranged by shop. Customer sees estimated arrival date provided by shop.',
     paymentMethod: 'Cash on Delivery (COD)',
-    paymentStatus: 'Pending Collection ($189.00)',
+    paymentType: 'cod',
+    paymentStatus: 'Pending Collection Upon Delivery ($189.00)',
     address: '742 Evergreen Terrace, Apt 4B, Springfield Metro, CA',
     items: [
       {
@@ -391,11 +372,13 @@ export const INITIAL_ORDERS = [
       }
     ],
     timeline: [
-      { step: 1, title: 'Order Placed', time: 'Sep 24, 09:15 AM', done: true, desc: 'Order submitted by customer' },
-      { step: 2, title: 'Order Confirmed', time: 'Sep 24, 10:30 AM', done: true, desc: 'Verified item availability in Warehouse stock' },
-      { step: 3, title: 'Estimated Arrival Date Set', time: 'Sep 24, 02:00 PM', done: true, desc: 'Shop scheduled delivery with NinjaVan' },
-      { step: 4, title: 'Order In Delivery', time: 'Sep 25, 08:45 AM', done: true, desc: 'Parcel handed over to courier (Tracking: NV-9942-8812)' },
-      { step: 5, title: 'Order Completed', time: 'Pending Delivery', done: false, desc: 'Awaiting courier drop-off & customer confirmation' }
+      { step: 1, title: 'Browse & Select', time: 'Sep 24, 09:15 AM', done: true, desc: 'Customer browsed, searched and added products to cart' },
+      { step: 2, title: 'Checkout', time: 'Sep 24, 09:20 AM', done: true, desc: 'Selected delivery address and applied discount' },
+      { step: 3, title: 'Make Payment', time: 'Sep 24, 09:22 AM', done: true, desc: 'Selected Cash on Delivery (COD)' },
+      { step: 4, title: 'Order Confirmed', time: 'Sep 24, 09:25 AM', done: true, desc: 'Customer received order confirmation. Shop checked stock.' },
+      { step: 5, title: 'View Estimated Arrival Date', time: 'Sep 24, 02:00 PM', done: true, desc: 'Shop arranged courier and set estimated arrival: Tomorrow by 6:00 PM' },
+      { step: 6, title: 'Order In Delivery', time: 'Sep 25, 08:30 AM', done: true, desc: 'Customer sees order status "In Delivery" (with estimated date)' },
+      { step: 7, title: 'Order Completed', time: 'Pending Delivery', done: false, desc: 'Admin closes order once confirmed with delivery service' }
     ],
     subtotal: 189.00,
     shippingFee: 0.00,
@@ -403,17 +386,94 @@ export const INITIAL_ORDERS = [
     total: 189.00
   },
   {
+    id: 'ORD-98422',
+    date: 'Yesterday, 04:15 PM',
+    status: 'date_set',
+    statusText: 'Arrival Date Set',
+    stepNumber: 5,
+    stepTitle: 'Step 5: View Estimated Arrival Date',
+    estimatedArrival: 'Oct 2, 2026',
+    deliveryService: 'Flash Express',
+    deliveryServiceNotice: 'Shop entered delivery service estimated arrival date into system.',
+    paymentMethod: 'Online Payment (Card)',
+    paymentType: 'online',
+    paymentStatus: 'Paid Online',
+    address: '500 Tech Parkway, Suite 300, Silicon Park, CA',
+    items: [
+      {
+        id: 'prod-005',
+        title: 'Nuance 75% Mechanical Keyboard (Hot-Swap)',
+        color: 'Botanical Green',
+        price: 119.00,
+        qty: 1,
+        image: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=200&auto=format&fit=crop&q=80'
+      }
+    ],
+    timeline: [
+      { step: 1, title: 'Browse & Select', time: 'Sep 25, 04:00 PM', done: true, desc: 'Customer browsed and added keyboard to cart' },
+      { step: 2, title: 'Checkout', time: 'Sep 25, 04:08 PM', done: true, desc: 'Selected office address and entered promo code' },
+      { step: 3, title: 'Make Payment', time: 'Sep 25, 04:12 PM', done: true, desc: 'Paid online via credit card' },
+      { step: 4, title: 'Order Confirmed', time: 'Sep 25, 04:15 PM', done: true, desc: 'Customer received order confirmation. Inventory reserved.' },
+      { step: 5, title: 'View Estimated Arrival Date', time: 'Sep 25, 05:30 PM', done: true, desc: 'Customer sees estimated arrival date (Oct 2, 2026) provided by the shop' },
+      { step: 6, title: 'Order In Delivery', time: 'Awaiting Pickup', done: false, desc: 'Courier will pick up parcel for transit' },
+      { step: 7, title: 'Order Completed', time: 'Pending Arrival', done: false, desc: 'Admin closes order upon delivery confirmation' }
+    ],
+    subtotal: 119.00,
+    shippingFee: 0.00,
+    discount: 10.00,
+    total: 109.00
+  },
+  {
+    id: 'ORD-98423',
+    date: 'Just Now',
+    status: 'confirmed',
+    statusText: 'Order Confirmed',
+    stepNumber: 4,
+    stepTitle: 'Step 4: Order Confirmed',
+    estimatedArrival: 'Pending Shop Arrangement',
+    deliveryService: 'Arranging with Delivery Service',
+    deliveryServiceNotice: 'Customer received order confirmation. Shop is verifying order & preparing items.',
+    paymentMethod: 'Online Payment',
+    paymentType: 'online',
+    paymentStatus: 'Paid Online',
+    address: '742 Evergreen Terrace, Apt 4B, Springfield Metro, CA',
+    items: [
+      {
+        id: 'prod-003',
+        title: 'Nordic Oak Ergonomic Desktop Shelf & Dock',
+        color: 'Natural Oak',
+        price: 78.00,
+        qty: 1,
+        image: 'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=200&auto=format&fit=crop&q=80'
+      }
+    ],
+    timeline: [
+      { step: 1, title: 'Browse & Select', time: 'Just now', done: true, desc: 'Customer browsed and added desktop shelf' },
+      { step: 2, title: 'Checkout', time: 'Just now', done: true, desc: 'Selected home address and checked total' },
+      { step: 3, title: 'Make Payment', time: 'Just now', done: true, desc: 'Paid online successfully' },
+      { step: 4, title: 'Order Confirmed', time: 'Just now', done: true, desc: 'Customer received order confirmation' },
+      { step: 5, title: 'View Estimated Arrival Date', time: 'Pending', done: false, desc: 'Shop will arrange delivery service and enter estimated date' },
+      { step: 6, title: 'Order In Delivery', time: 'Pending', done: false, desc: 'Awaiting dispatch' },
+      { step: 7, title: 'Order Completed', time: 'Pending', done: false, desc: 'Awaiting delivery & closing' }
+    ],
+    subtotal: 78.00,
+    shippingFee: 0.00,
+    discount: 0.00,
+    total: 78.00
+  },
+  {
     id: 'ORD-94102',
     date: 'Sep 22, 2026',
     status: 'completed',
-    statusText: 'Completed',
-    statusCode: 7, // Step 7 of Visual Flow
+    statusText: 'Order Completed',
+    stepNumber: 7,
+    stepTitle: 'Step 7: Order Completed',
     estimatedArrival: 'Delivered on Sep 24',
-    carrier: 'DHL eCommerce',
-    trackingNumber: 'DHL-33910-X',
-    deliveryServiceNotice: 'Package handed directly to resident. Order closed by admin.',
-    paymentMethod: 'Credit / Debit Card',
-    paymentStatus: 'Paid',
+    deliveryService: 'DHL eCommerce',
+    deliveryServiceNotice: 'Item arrived (confirmed with delivery service), admin closed the order.',
+    paymentMethod: 'Cash on Delivery (COD)',
+    paymentType: 'cod',
+    paymentStatus: 'Paid Upon Delivery ($67.00)',
     address: '742 Evergreen Terrace, Apt 4B, Springfield Metro, CA',
     items: [
       {
@@ -426,11 +486,13 @@ export const INITIAL_ORDERS = [
       }
     ],
     timeline: [
-      { step: 1, title: 'Order Placed', time: 'Sep 22, 01:20 PM', done: true, desc: 'Customer placed order online' },
-      { step: 2, title: 'Order Confirmed', time: 'Sep 22, 02:10 PM', done: true, desc: 'Inventory deducted from physical shop stock' },
-      { step: 3, title: 'Estimated Arrival Date Set', time: 'Sep 22, 04:30 PM', done: true, desc: 'Arrival date scheduled for Sep 24' },
-      { step: 4, title: 'Order In Delivery', time: 'Sep 23, 09:00 AM', done: true, desc: 'Dispatched via DHL eCommerce' },
-      { step: 5, title: 'Order Completed', time: 'Sep 24, 03:15 PM', done: true, desc: 'Delivered successfully and closed in admin portal' }
+      { step: 1, title: 'Browse & Select', time: 'Sep 22, 01:20 PM', done: true, desc: 'Browsed and added flasks to cart' },
+      { step: 2, title: 'Checkout', time: 'Sep 22, 01:25 PM', done: true, desc: 'Selected address and applied discount' },
+      { step: 3, title: 'Make Payment', time: 'Sep 22, 01:28 PM', done: true, desc: 'Chose Cash on Delivery (COD)' },
+      { step: 4, title: 'Order Confirmed', time: 'Sep 22, 01:30 PM', done: true, desc: 'Customer received order confirmation' },
+      { step: 5, title: 'View Estimated Arrival Date', time: 'Sep 22, 03:00 PM', done: true, desc: 'Shop scheduled delivery date for Sep 24' },
+      { step: 6, title: 'Order In Delivery', time: 'Sep 23, 08:30 AM', done: true, desc: 'Courier en route' },
+      { step: 7, title: 'Order Completed', time: 'Sep 24, 02:45 PM', done: true, desc: 'Once item arrived, admin closed the order' }
     ],
     subtotal: 72.00,
     shippingFee: 0.00,

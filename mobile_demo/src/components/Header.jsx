@@ -11,13 +11,18 @@ export default function Header({
   return (
     <header className="app-header-sticky">
       <div className="header-top-row">
-        <div className="header-brand" onClick={() => onTabChange('home')} style={{ cursor: 'pointer' }}>
-          <div className="header-logo-icon">
-            <Sparkles size={16} />
-          </div>
-          <div>
-            <h1 className="header-brand-title">Lumina</h1>
-          </div>
+        <div className="header-brand" onClick={() => onTabChange('home')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+          <img
+            src="/logo.png"
+            alt="Vanda"
+            style={{
+              height: 36,
+              width: 'auto',
+              maxHeight: 36,
+              objectFit: 'contain',
+              display: 'block'
+            }}
+          />
         </div>
 
         <div className="header-actions">

@@ -8,11 +8,19 @@ import {
   Settings,
   ChevronRight,
   ShieldCheck,
-  Headphones
+  Headphones,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { SAVED_ADDRESSES } from '../data/dummyData';
 
-export default function ProfileView({ onNavigateToOrders, orders }) {
+export default function ProfileView({
+  onNavigateToOrders,
+  orders,
+  theme = 'light',
+  onToggleTheme,
+  onSetTheme
+}) {
   const inDeliveryCount = orders.filter((o) => o.status === 'in_delivery' || o.status === 'confirmed').length;
   const completedCount = orders.filter((o) => o.status === 'completed').length;
 
@@ -26,78 +34,89 @@ export default function ProfileView({ onNavigateToOrders, orders }) {
           borderRadius: 'var(--radius-lg)',
           padding: '18px 16px',
           marginBottom: 16,
-          boxShadow: 'var(--shadow-md)'
+          boxShadow: 'var(--shadow-md)',
+          position: 'relative'
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div
-            style={{
-              width: 52,
-              height: 52,
-              borderRadius: '50%',
-              background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-              color: '#0f172a',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontWeight: 800,
-              fontSize: '18px',
-              border: '2px solid rgba(255,255,255,0.2)'
-            }}
-          >
-            AM
-          </div>
-          <div style={{ flex: 1 }}>
-            <h3 style={{ fontSize: '16px', fontWeight: 800 }}>Alex Morgan</h3>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 3 }}>
-              <span
-                style={{
-                  fontSize: '10px',
-                  fontWeight: 700,
-                  background: 'rgba(255,255,255,0.15)',
-                  padding: '2px 8px',
-                  borderRadius: '999px',
-                  color: '#f8fafc'
-                }}
-              >
-                PLATINUM MEMBER
-              </span>
-              <span style={{ fontSize: '11px', color: '#94a3b8' }}>• 1,420 pts</span>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div
+              style={{
+                width: 50,
+                height: 50,
+                borderRadius: '50%',
+                background: 'linear-gradient(135deg, #e39d3d 0%, #cb8527 100%)',
+                color: '#0f172a',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: 800,
+                fontSize: '17px',
+                border: '2px solid rgba(255,255,255,0.2)'
+              }}
+            >
+              AM
+            </div>
+            <div>
+              <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#ffffff' }}>Alex Morgan</h3>
+              <div style={{ fontSize: '11.5px', color: '#94a3b8', marginTop: 2 }}>
+                alex.morgan@email.com
+              </div>
             </div>
           </div>
+
+          {/* Quick Header Theme Toggle Button */}
+          {onToggleTheme && (
+            <button
+              onClick={onToggleTheme}
+              className="theme-toggle-header-btn"
+              title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
+              aria-label="Toggle Theme"
+            >
+              {theme === 'dark' ? <Sun size={13} color="#f59e0b" /> : <Moon size={13} color="#cbd5e1" />}
+              <span>{theme === 'dark' ? 'Dark' : 'Light'}</span>
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Dedicated Appearance & Theme Switcher Card */}
+      <div className="theme-switch-card">
+        <div className="theme-switch-header">
+          <div className="theme-switch-title-wrap">
+            {theme === 'dark' ? <Moon size={16} color="var(--primary)" /> : <Sun size={16} color="var(--primary)" />}
+            <span>App Appearance & Theme</span>
+          </div>
+          <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--primary)', textTransform: 'capitalize' }}>
+            {theme} Mode
+          </span>
         </div>
 
-        {/* Quick Balance / Vouchers Bar */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: 8,
-            marginTop: 16,
-            paddingTop: 14,
-            borderTop: '1px solid rgba(255,255,255,0.12)',
-            textAlign: 'center'
-          }}
-        >
-          <div>
-            <div style={{ fontSize: '15px', fontWeight: 800 }}>$150.00</div>
-            <div style={{ fontSize: '10.5px', color: '#94a3b8', marginTop: 2 }}>Wallet Balance</div>
-          </div>
-          <div>
-            <div style={{ fontSize: '15px', fontWeight: 800 }}>4</div>
-            <div style={{ fontSize: '10.5px', color: '#94a3b8', marginTop: 2 }}>Active Vouchers</div>
-          </div>
-          <div>
-            <div style={{ fontSize: '15px', fontWeight: 800 }}>1,420</div>
-            <div style={{ fontSize: '10.5px', color: '#94a3b8', marginTop: 2 }}>Lumina Points</div>
-          </div>
+        <div className="theme-toggle-segmented">
+          <button
+            className={`theme-option-btn ${theme === 'light' ? 'active light-active' : ''}`}
+            onClick={() => onSetTheme && onSetTheme('light')}
+            type="button"
+          >
+            <Sun size={15} />
+            <span>Light Theme</span>
+          </button>
+
+          <button
+            className={`theme-option-btn ${theme === 'dark' ? 'active dark-active' : ''}`}
+            onClick={() => onSetTheme && onSetTheme('dark')}
+            type="button"
+          >
+            <Moon size={15} />
+            <span>Dark Theme</span>
+          </button>
         </div>
       </div>
 
       {/* Order Status Navigation Section (Like Shopee Me page) */}
       <div
         style={{
-          background: '#ffffff',
+          background: 'var(--bg-surface)',
           borderRadius: 'var(--radius-md)',
           border: '1px solid var(--border-default)',
           padding: '14px',
@@ -187,7 +206,7 @@ export default function ProfileView({ onNavigateToOrders, orders }) {
       {/* Saved Delivery Addresses */}
       <div
         style={{
-          background: '#ffffff',
+          background: 'var(--bg-surface)',
           borderRadius: 'var(--radius-md)',
           border: '1px solid var(--border-default)',
           padding: '14px',
@@ -240,7 +259,7 @@ export default function ProfileView({ onNavigateToOrders, orders }) {
       {/* Support & Policies Links */}
       <div
         style={{
-          background: '#ffffff',
+          background: 'var(--bg-surface)',
           borderRadius: 'var(--radius-md)',
           border: '1px solid var(--border-default)',
           overflow: 'hidden'

@@ -32,14 +32,14 @@ export default function CartView({
 
   const handleApplyVoucher = (e) => {
     e.preventDefault();
-    if (voucherCode.trim().toUpperCase() === 'LUMINA10' || voucherCode.trim().toUpperCase() === 'SHOPEE10') {
+    if (voucherCode.trim().toUpperCase() === 'VANDA10' || voucherCode.trim().toUpperCase() === 'LUMINA10' || voucherCode.trim().toUpperCase() === 'SHOPEE10') {
       setAppliedDiscount(10.00);
       setVoucherMessage({ type: 'success', text: '$10.00 discount voucher applied!' });
     } else if (voucherCode.trim().toUpperCase() === 'FREESHIP') {
       setAppliedDiscount(5.00);
       setVoucherMessage({ type: 'success', text: 'Free shipping voucher applied!' });
     } else {
-      setVoucherMessage({ type: 'error', text: 'Invalid code. Try "LUMINA10"' });
+      setVoucherMessage({ type: 'error', text: 'Invalid code. Try "VANDA10"' });
     }
   };
 
@@ -150,7 +150,7 @@ export default function CartView({
             <div
               key={itemKey}
               style={{
-                background: '#ffffff',
+                background: 'var(--bg-surface)',
                 border: '1px solid var(--border-default)',
                 borderRadius: 'var(--radius-md)',
                 padding: '12px',
@@ -277,7 +277,7 @@ export default function CartView({
             <Tag size={15} color="#94a3b8" />
             <input
               type="text"
-              placeholder="Promo code (e.g. LUMINA10)"
+              placeholder="Promo code (e.g. VANDA10)"
               value={voucherCode}
               onChange={(e) => setVoucherCode(e.target.value)}
             />
@@ -315,7 +315,7 @@ export default function CartView({
       {/* Summary Box */}
       <div
         style={{
-          background: '#ffffff',
+          background: 'var(--bg-surface)',
           border: '1px solid var(--border-default)',
           borderRadius: 'var(--radius-md)',
           padding: '14px',
@@ -358,21 +358,22 @@ export default function CartView({
         </div>
       </div>
 
-      {/* Floating Bottom Checkout Action Bar */}
+      {/* Sticky Bottom Checkout Action Bar */}
       <div
         style={{
-          position: 'absolute',
-          bottom: 64, // right above bottom nav
+          position: 'sticky',
+          bottom: 0,
           left: 0,
           right: 0,
-          background: 'rgba(255, 255, 255, 0.98)',
+          background: 'var(--bg-bottom-nav)',
           backdropFilter: 'blur(16px)',
           borderTop: '1px solid var(--border-default)',
           padding: '10px 14px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          zIndex: 45
+          zIndex: 45,
+          boxShadow: '0 -4px 16px rgba(15, 23, 42, 0.06)'
         }}
       >
         <div>

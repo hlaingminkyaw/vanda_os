@@ -8,7 +8,7 @@ An e-commerce platform featuring multi-channel inventory management, mobile/web 
 
 All system documentation, architecture diagrams, and specification flows are stored in the [`docs/`](docs/) directory:
 
-- [**Visual System Flow**](docs/ecommerce-visual-flow.png) (`docs/ecommerce-visual-flow.png`): High-level overview of the entire e-commerce journey.
+- [**Visual Flow Architecture**](docs/visual%20flow.png) (`docs/visual flow.png`): High-level visual map covering Customer Mobile App Flow (7 steps), Admin Operations Flow, Admin Modules, and Delivery Flow.
 - [**Complete Mermaid Flowchart**](docs/ecommerce_complete_mermaid_flow.mermaid) (`docs/ecommerce_complete_mermaid_flow.mermaid`): Detailed state and process logic covering:
   - Product & Inventory Setup (Warehouse Stock & Physical Shop Stock)
   - Customer Experience (Browse, Filter, Cart, Checkout)
@@ -52,21 +52,24 @@ npx backlog task create "Task title"
 
 ## 📱 Mobile App Demo (`mobile_demo`)
 
-A modern, mobile-only React e-commerce application located in [`mobile_demo/`](mobile_demo/) modeling the end-to-end shopping and order lifecycle from [`docs/ecommerce-visual-flow.png`](docs/ecommerce-visual-flow.png).
+A modern React mobile demo located in [`mobile_demo/`](mobile_demo/) featuring the **Vanda** brand identity, warm amber palette, persistent light/dark theme switcher, and the end-to-end shopping & order lifecycle with Home, Categories, Cart, Orders, and Profile.
 
-### Key Features & Design Philosophy
-- **Designer-Crafted UI**: Warm, balanced neutral palette with controlled terracotta accents, avoiding oversaturated colors, with smooth transitions and subtle elevation.
-- **Mobile Phone Frame Simulator**: On desktop, renders inside an elegant phone mockup with status bar, dynamic island, and a full-screen toggle; automatically responsive on mobile viewports.
-- **Zero API Dependency**: Powered entirely by rich, structured JSON dummy data in [`dummyData.js`](mobile_demo/src/data/dummyData.js) (products, categories, stock, delivery carriers, and sample orders).
-- **Multi-Location Inventory Tracking**: Displays real-time breakdown of **Warehouse Stock** vs. **Physical Shop Stock** on product pages as specified in the architecture.
-- **Complete Visual Flow Implementation**:
-  1. *Browse & Select*: Hero banner carousel, categories, flash deals with live countdown & progress bars, search, and dual-column grid.
-  2. *Checkout*: Saved delivery address selection, courier options (Standard Free vs Priority Courier).
-  3. *Payment*: Cash on Delivery (COD), Credit/Debit Card, or QR Digital Wallet.
-  4. *Order Confirmed & Stock Deduction*: Automatically reserves stock and generates order ID.
-  5. *Estimated Arrival Date*: Calculated delivery window provided by shop/courier.
-  6. *In Delivery*: Tracking number, courier assignment, and active status pill.
-  7. *Completed*: Permanent status ledger with past order history.
+### Customer Mobile App Flow Scope (7 Steps)
+1. **Browse & Select**: Customer browses products, filters by category, searches, and adds items to cart.
+2. **Checkout**: Customer selects delivery address, chooses payment method, and applies discount (if available).
+3. **Make Payment**: Customer selects between **Online Payment** and **Cash on Delivery (COD)**.
+4. **Order Confirmed**: Customer receives order confirmation with order details while the shop verifies stock and prepares items.
+5. **View Estimated Arrival Date**: Delivery service provides estimated arrival date to shop; shop enters it into the system so the customer can view the estimated date.
+6. **Order In Delivery**: Customer sees order status "In Delivery" (with estimated arrival date).
+7. **Order Completed**: Once the item arrives (confirmed with delivery service), shop admin closes the order.
+
+### Delivery Flow Rule
+As specified in the visual flow:
+- Admin arranges with delivery service manually.
+- Delivery service provides estimated arrival date.
+- Admin enters estimated arrival date into the system.
+- Customer only sees the estimated arrival date.
+- When the item arrives, admin inquires the delivery service and closes the order.
 
 
 ---

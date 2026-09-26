@@ -5,7 +5,6 @@ import {
   Star,
   Truck,
   Check,
-  MessageSquare,
   Layers
 } from 'lucide-react';
 
@@ -153,7 +152,7 @@ export default function ProductDetailModal({
           </div>
         </div>
 
-        {/* Shipping & Delivery Guarantee Card */}
+        {/* Shipping & Delivery Note (Per docs/visual flow.png) */}
         <div className="detail-info-card">
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
             <div
@@ -173,11 +172,10 @@ export default function ProductDetailModal({
             </div>
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-main)' }}>
-                {product.shipping?.freeShipping ? 'Free Doorstep Delivery' : 'Standard Shipping ($4.00)'}
+                Doorstep Delivery (Arranged by Shop)
               </div>
               <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: 2 }}>
-                Estimated delivery in <strong>{product.shipping?.estimatedDelivery}</strong> via{' '}
-                <strong>{product.shipping?.carrier}</strong>
+                Estimated arrival date will be provided by the shop once delivery service is arranged.
               </div>
             </div>
           </div>
@@ -297,21 +295,12 @@ export default function ProductDetailModal({
 
       {/* Sticky Bottom Action Dock */}
       <div className="product-bottom-action-dock">
-        <button
-          className="btn-dock-icon"
-          onClick={() => alert('Support chat opened with Shop Store Representative.')}
-          aria-label="Chat"
-        >
-          <MessageSquare size={18} />
-          <span>Chat</span>
-        </button>
-
-        <button className="btn-secondary-action" onClick={handleAddToCart}>
+        <button className="btn-secondary-action" onClick={handleAddToCart} style={{ flex: 1 }}>
           <ShoppingBag size={16} />
           <span>Add to Cart</span>
         </button>
 
-        <button className="btn-primary-action" onClick={handleBuyNow}>
+        <button className="btn-primary-action" onClick={handleBuyNow} style={{ flex: 1 }}>
           <span>Buy Now</span>
         </button>
       </div>

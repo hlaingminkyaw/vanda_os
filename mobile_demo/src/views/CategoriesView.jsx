@@ -54,8 +54,8 @@ export default function CategoriesView({
               key={cat.id}
               onClick={() => onSelectCategory(cat.id)}
               style={{
-                background: isSelected ? 'var(--text-main)' : '#ffffff',
-                color: isSelected ? '#ffffff' : 'var(--text-main)',
+                background: isSelected ? 'var(--text-main)' : 'var(--bg-surface)',
+                color: isSelected ? 'var(--text-inverse)' : 'var(--text-main)',
                 border: isSelected ? '1px solid var(--text-main)' : '1px solid var(--border-default)',
                 borderRadius: 'var(--radius-md)',
                 padding: '12px 8px',
